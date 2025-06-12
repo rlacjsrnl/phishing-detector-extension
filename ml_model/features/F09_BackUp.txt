@@ -1,0 +1,77 @@
+ F09: 0.5916
+
+
+
+
+import whois
+from urllib.parse import urlparse
+from datetime import datetime
+import time
+import socket
+from dateutil import parser
+
+# WHOIS 요청 timeout 제한 (5초)
+socket.setdefaulttimeout(5)
+
+
+def safe_whois(domain, retries=3, delay=2):
+    for i in range(retries):
+        try:
+            return whois.whois(domain)
+        except Exception as e:
+            error_msg = str(e).splitlines()[0]  # 첫 줄만 출력
+            print(f"[WHOIS 재시도 {i+1} - {domain}] 실패 → {error_msg}")
+            time.sleep(delay)
+    return None
+
+
+def feature_09_domain_registration_length(url: str) -> int:
+    """
+    도메인 등록 기간이 1년 미만이면 피싱으로 간주
+
+    Returns:
+        -1 : 등록 기간 ≥ 365일 (정상)
+         1 : 등록 기간 < 365일 or 정보 없음 (피싱 의심)
+    """
+    try:
+        domain = urlparse(url).netloc.split(':')[0]  # 포트 제거
+        w = safe_whois(domain)
+
+        if w is None:
+            return 1  # WHOIS 요청 실패 시 피싱 의심
+
+        creation_date = w.creation_date
+        expiration_date = w.expiration_date
+
+        # 리스트 형식 처리 (일부 도메인 제공자 이슈)
+        if isinstance(creation_date, list):
+            creation_date = creation_date[0]
+        if isinstance(expiration_date, list):
+            expiration_date = expiration_date[0]
+
+        # 문자열을 datetime으로 파싱
+        if isinstance(creation_date, str):
+            creation_date = parser.parse(creation_date)
+        if isinstance(expiration_date, str):
+            expiration_date = parser.parse(expiration_date)
+
+        if not creation_date or not expiration_date:
+            return 1  # 정보 없음
+
+        # 등록 기간 계산
+        registration_length = (expiration_date - creation_date).days
+        return -1 if registration_length >= 365 else 1
+    except Exception as e:
+        print(f"[WHOIS 예외 - {url}] {e}")
+        return 1  # 예외 시 피싱 의심
+
+
+# 테스트
+if __name__ == "__main__":
+    test_urls = [
+        "https://google.com",         # 정상 (오래된 도메인)
+        "https://example.xyz",        # 새 도메인일 수 있음
+        "https://a-newly-made.site"   # 보통 등록기간 짧음
+    ]
+    for url in test_urls:
+        print(f"{url} → {feature_09_domain_registration_length(url)}")

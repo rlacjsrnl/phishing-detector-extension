@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>피싱 탐지기</title>
+  <style>
+    body { font-family: Arial; width: 250px; padding: 10px; }
+    #result { margin-top: 15px; font-weight: bold; }
+    input[type="text"] { width: 100%; padding: 5px; margin-top: 10px; box-sizing: border-box; }
+    button { margin-top: 10px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h3>현재 페이지 분석</h3>
+  <button id="checkBtn">피싱 여부 확인</button>
+
+  <h3>직접 URL 입력</h3>
+  <input type="text" id="urlInput" placeholder="https://example.com" />
+  <button id="submitBtn">URL 검사</button>
+
+  <div id="result"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

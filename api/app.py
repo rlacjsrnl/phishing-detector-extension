@@ -1,3 +1,4 @@
+import sys
 import os
 from urllib.parse import urlparse
 from flask import Flask, request, jsonify
@@ -6,6 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import numpy as np
 import shap
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from ml_model.extract_features import extract_features
 
 app = Flask(__name__)

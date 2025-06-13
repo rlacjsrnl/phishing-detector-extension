@@ -1,0 +1,14 @@
+flask
+pandas
+numpy
+lightgbm
+shap>=0.20
+tldextract
+tqdm
+matplotlib
+python-whois
+joblib
+requests
+deap
+beautifulsoup4
+scikit-learn==1.6.1

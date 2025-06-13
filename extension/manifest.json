@@ -4,7 +4,7 @@
   "version": "1.0",
   "description": "현재 접속한 사이트가 피싱인지 확인합니다.",
   "permissions": ["tabs"],
-  "host_permissions": ["http://127.0.0.1:5000/*"],
+  "host_permissions": ["https://249f-61-98-139-158.ngrok-free.app/*"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

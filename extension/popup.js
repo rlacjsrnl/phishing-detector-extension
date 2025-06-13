@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function checkUrl(url) {
-    const apiUrl = "http://127.0.0.1:5000/predict?t=" + Date.now(); // 캐시 방지용 timestamp 추가
+    const apiUrl = "https://249f-61-98-139-158.ngrok-free.app" + Date.now(); // 캐시 방지용 timestamp 추가
 
     fetch(apiUrl, {
       method: "POST",
